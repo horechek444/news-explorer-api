@@ -9,7 +9,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 require('dotenv').config();
 
 const app = express();
-const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
+const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/newsdb' } = process.env;
 
 app.use(cors());
 

@@ -5,8 +5,8 @@ const { ERROR_CODE } = require('../utils/error-code');
 
 const getArticles = async (req, res, next) => {
   try {
-    const cards = await Article.find({});
-    res.send(cards);
+    const articles = await Article.find({});
+    res.send(articles);
   } catch (err) {
     if (err.name === 'CastError') {
       err.statusCode = ERROR_CODE;
@@ -17,12 +17,16 @@ const getArticles = async (req, res, next) => {
 
 const createArticle = async (req, res, next) => {
   try {
-    const { name, link } = req.body;
+    const {
+      keyword, title, text, date, source, link, image,
+    } = req.body;
     const owner = req.user.id;
-    const card = await Article.create({
-      owner, name, link,
+    await Article.create({
+      owner, keyword, title, text, date, source, link, image,
     });
-    res.send(card);
+    res.send({
+      keyword, title, text, date, source, link, image,
+    });
   } catch (err) {
     if (err.name === 'CastError' || err.name === 'ValidationError') {
       err.statusCode = ERROR_CODE;

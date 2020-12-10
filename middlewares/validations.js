@@ -23,6 +23,10 @@ const validateArticleBody = celebrate({
       .messages({
         'string.required': 'Поле "title" должно быть заполнено',
       }),
+    text: Joi.string().required()
+      .messages({
+        'string.required': 'Поле "title" должно быть заполнено',
+      }),
     date: Joi.string().required()
       .messages({
         'string.required': 'Поле "date" должно быть заполнено',
@@ -32,7 +36,7 @@ const validateArticleBody = celebrate({
         'string.required': 'Поле "source" должно быть заполнено',
       }),
     link: Joi.string().required().custom((value, helpers) => {
-      if (validator.isUrl(value)) {
+      if (validator.isURL(value)) {
         return value;
       }
       return helpers.message('Поле "link" должно быть валидным url-адресом');
@@ -41,7 +45,7 @@ const validateArticleBody = celebrate({
         'any.required': 'Поле "link" должно быть заполнено',
       }),
     image: Joi.string().required().custom((value, helpers) => {
-      if (validator.isUrl(value)) {
+      if (validator.isURL(value)) {
         return value;
       }
       return helpers.message('Поле "image" должно быть валидным url-адресом');
@@ -65,8 +69,9 @@ const validateUserBody = celebrate({
       .messages({
         'string.required': 'Поле "email" должно быть заполнено',
       }),
-    password: Joi.string().required()
+    password: Joi.string().min(8).required()
       .messages({
+        'string.min': 'Минимальная длина поля "password" - 8 символов',
         'any.required': 'Поле "password" должно быть заполнено',
       }),
   }),
@@ -79,14 +84,15 @@ const validateAuthentication = celebrate({
       .messages({
         'string.required': 'Поле "email" должно быть заполнено',
       }),
-    password: Joi.string().required()
+    password: Joi.string().min(8).required()
       .messages({
+        'string.min': 'Минимальная длина поля "password" - 8 символов',
         'any.required': 'Поле "password" должно быть заполнено',
       }),
   }),
 });
 
-module.export = {
+module.exports = {
   validateObjId,
   validateArticleBody,
   validateUserBody,

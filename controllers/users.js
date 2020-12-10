@@ -9,10 +9,11 @@ const { ERROR_CODE } = require('../utils/error-code');
 const getCurrentUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
+    const { email, name } = user;
     if (!user) {
       throw new NotFoundError('Нет пользователя с таким id');
     }
-    res.send(user);
+    res.send({ email, name });
   } catch (err) {
     if (err.name === 'CastError') {
       err.statusCode = ERROR_CODE;
@@ -22,7 +23,7 @@ const getCurrentUser = async (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
 
   User.findOne({ email })
     .then((user) => {
@@ -32,9 +33,9 @@ const createUser = (req, res, next) => {
       return bcrypt.hash(password, 10);
     })
     .then((hash) => {
-      User.create({ email, password: hash })
-        .then(({ _id }) => {
-          res.send({ email, _id });
+      User.create({ email, password: hash, name })
+        .then(() => {
+          res.send({ email, name });
         });
     })
     .catch(next);

@@ -10,6 +10,10 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Поле "title" должно быть заполнено'],
   },
+  text: {
+    type: String,
+    required: [true, 'Поле "title" должно быть заполнено'],
+  },
   date: {
     type: String,
     required: [true, 'Поле "date" должно быть заполнено'],
@@ -22,7 +26,7 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Поле "link" должно быть заполнено'],
     validate: {
-      validator: (url) => validator.isUrl(url),
+      validator: (url) => validator.isURL(url),
       message: 'Поле "link" должно быть валидным url-адресом',
     },
   },
@@ -30,7 +34,7 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Поле "image" должно быть заполнено'],
     validate: {
-      validator: (url) => validator.isUrl(url),
+      validator: (url) => validator.isURL(url),
       message: 'Поле "image" должно быть валидным url-адресом',
     },
   },
