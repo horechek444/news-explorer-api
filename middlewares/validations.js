@@ -4,12 +4,13 @@ const validator = require('validator');
 
 const validateObjId = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().required().custom((value, helpers) => {
-      if (ObjectId.isValid(value)) {
-        return value;
-      }
-      return helpers.message('Невалидный id');
-    }),
+    articleId: Joi.string().required().hex().length(24)
+      .custom((value, helpers) => {
+        if (ObjectId.isValid(value)) {
+          return value;
+        }
+        return helpers.message('Невалидный id');
+      }),
   }),
 });
 
@@ -17,23 +18,28 @@ const validateArticleBody = celebrate({
   body: Joi.object().keys({
     keyword: Joi.string().required()
       .messages({
-        'string.required': 'Поле "keyword" должно быть заполнено',
+        'any.required': 'Поле "keyword" должно быть заполнено',
+        'string.empty': 'Поле "keyword" не должно быть пустым',
       }),
     title: Joi.string().required()
       .messages({
-        'string.required': 'Поле "title" должно быть заполнено',
+        'any.required': 'Поле "title" должно быть заполнено',
+        'string.empty': 'Поле "title" не должно быть пустым',
       }),
     text: Joi.string().required()
       .messages({
-        'string.required': 'Поле "title" должно быть заполнено',
+        'any.required': 'Поле "text" должно быть заполнено',
+        'string.empty': 'Поле "text" не должно быть пустым',
       }),
     date: Joi.string().required()
       .messages({
-        'string.required': 'Поле "date" должно быть заполнено',
+        'any.required': 'Поле "date" должно быть заполнено',
+        'string.empty': 'Поле "date" не должно быть пустым',
       }),
     source: Joi.string().required()
       .messages({
-        'string.required': 'Поле "source" должно быть заполнено',
+        'any.required': 'Поле "source" должно быть заполнено',
+        'string.empty': 'Поле "source" не должно быть пустым',
       }),
     link: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
@@ -43,6 +49,7 @@ const validateArticleBody = celebrate({
     })
       .messages({
         'any.required': 'Поле "link" должно быть заполнено',
+        'string.empty': 'Поле "link" не должно быть пустым',
       }),
     image: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
@@ -52,6 +59,7 @@ const validateArticleBody = celebrate({
     })
       .messages({
         'any.required': 'Поле "image" должно быть заполнено',
+        'string.empty': 'Поле "image" не должно быть пустым',
       }),
   }),
 });
@@ -62,17 +70,20 @@ const validateUserBody = celebrate({
       .messages({
         'string.min': 'Минимальная длина поля "name" - 2 символа',
         'string.max': 'Максимальная длина поля "name" - 30 символов',
-        'string.required': 'Поле "name" должно быть заполнено',
+        'any.required': 'Поле "name" должно быть заполнено',
+        'string.empty': 'Поле "name" не должно быть пустым',
       }),
     email: Joi.string().required().email()
       .message('Поле "email" должно быть валидным email-адресом')
       .messages({
-        'string.required': 'Поле "email" должно быть заполнено',
+        'any.required': 'Поле "email" должно быть заполнено',
+        'string.empty': 'Поле "email" не должно быть пустым',
       }),
     password: Joi.string().min(8).required()
       .messages({
         'string.min': 'Минимальная длина поля "password" - 8 символов',
         'any.required': 'Поле "password" должно быть заполнено',
+        'string.empty': 'Поле "password" не должно быть пустым',
       }),
   }),
 });
@@ -82,12 +93,14 @@ const validateAuthentication = celebrate({
     email: Joi.string().required().email()
       .message('Поле "email" должно быть валидным email-адресом')
       .messages({
-        'string.required': 'Поле "email" должно быть заполнено',
+        'any.required': 'Поле "email" должно быть заполнено',
+        'string.empty': 'Поле "email" не должно быть пустым',
       }),
     password: Joi.string().min(8).required()
       .messages({
         'string.min': 'Минимальная длина поля "password" - 8 символов',
         'any.required': 'Поле "password" должно быть заполнено',
+        'string.empty': 'Поле "password" не должно быть пустым',
       }),
   }),
 });

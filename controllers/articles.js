@@ -5,7 +5,11 @@ const { ERROR_CODE } = require('../utils/error-code');
 
 const getArticles = async (req, res, next) => {
   try {
-    const articles = await Article.find({});
+    const owner = req.user.id;
+    const articles = await Article.find({ owner });
+    if (articles.length === 0) {
+      throw new NotFoundError('Нет сохраненных статей для вывода');
+    }
     res.send(articles);
   } catch (err) {
     if (err.name === 'CastError') {
@@ -38,15 +42,15 @@ const createArticle = async (req, res, next) => {
 const deleteArticle = async (req, res, next) => {
   try {
     const currentUser = req.user.id;
-    const articleId = req.params.id;
-    const cardForConfirm = await Article.findById(articleId);
-    if (cardForConfirm === null) {
+    const { articleId } = req.params;
+    const articleForConfirm = await Article.findById(articleId).select('+owner');
+    if (articleForConfirm === null) {
       throw new NotFoundError('Нет карточки с таким id');
-    } else if (currentUser !== cardForConfirm.owner.toString()) {
+    } else if (currentUser !== articleForConfirm.owner.toString()) {
       throw new Forbidden('Вы не владелец карточки и не можете её удалить');
     }
-    const confirmedCard = await Article.findByIdAndRemove(articleId);
-    res.send(confirmedCard);
+    const confirmedArticle = await Article.findByIdAndRemove(articleId);
+    res.send(confirmedArticle);
   } catch (err) {
     if (err.name === 'CastError') {
       err.statusCode = ERROR_CODE;

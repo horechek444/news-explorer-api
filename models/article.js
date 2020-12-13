@@ -39,7 +39,7 @@ const articleSchema = new mongoose.Schema({
     },
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId, // todo
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: [true, 'Поле "owner" должно быть заполнено'],
     select: false,

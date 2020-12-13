@@ -1,12 +1,13 @@
+require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
 const routes = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-require('dotenv').config();
+const errorHandler = require('./middlewares/error-handler');
 
 const app = express();
 const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/newsdb' } = process.env;
@@ -28,17 +29,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 app.use(routes);
 app.use(errorLogger);
-
 app.use(errors());
-
-app.use((err, req, res, next) => { // todo
-  const { statusCode = 500, message } = err;
-
-  res.status(statusCode).send({
-    message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
-  });
-  next();
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
