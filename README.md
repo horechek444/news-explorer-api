@@ -5,4 +5,4 @@
 
 Публичный IP-адрес сервера: 178.154.230.219
 
-Домен, по которому к нему можно обратиться: api.horechek-news.students.nomoredomains.work.
+Домен, по которому к нему можно обратиться: https://api.horechek-news.students.nomoredomains.work/.
