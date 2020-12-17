@@ -1,48 +1,47 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const { REQUIRED_MESSAGE, VALIDATION_MESSAGE } = require('../utils/utils');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('keyword')],
+    required: [true, 'Поле "keyword" должно быть заполнено'],
   },
   title: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('title')],
+    required: [true, 'Поле "title" должно быть заполнено'],
   },
   text: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('text')],
+    required: [true, 'Поле "title" должно быть заполнено'],
   },
   date: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('date')],
+    required: [true, 'Поле "date" должно быть заполнено'],
   },
   source: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('source')],
+    required: [true, 'Поле "source" должно быть заполнено'],
   },
   link: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('link')],
+    required: [true, 'Поле "link" должно быть заполнено'],
     validate: {
       validator: (url) => validator.isURL(url),
-      message: VALIDATION_MESSAGE('link', 'url'),
+      message: 'Поле "link" должно быть валидным url-адресом',
     },
   },
   image: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('image')],
+    required: [true, 'Поле "image" должно быть заполнено'],
     validate: {
       validator: (url) => validator.isURL(url),
-      message: VALIDATION_MESSAGE('image', 'url'),
+      message: 'Поле "image" должно быть валидным url-адресом',
     },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
-    required: [true, REQUIRED_MESSAGE('owner')],
+    required: [true, 'Поле "owner" должно быть заполнено'],
     select: false,
   },
 });

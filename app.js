@@ -8,13 +8,10 @@ const { errors } = require('celebrate');
 const routes = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/error-handler');
-const { devUrl } = require('./utils/config');
-const { limiter } = require('./utils/rate-limiter');
 
 const app = express();
-const { PORT = 3000, MONGO_URL = devUrl } = process.env;
+const { PORT = 8000, MONGO_URL = 'mongodb://127.0.0.1:27017/newsdb' } = process.env;
 
-app.use(limiter);
 app.use(cors());
 
 const mongooseConnectOptions = {
