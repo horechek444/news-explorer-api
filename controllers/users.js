@@ -4,19 +4,25 @@ const Unautorized = require('../errors/unauthorized');
 const ConflictingRequest = require('../errors/conflicting-request');
 const NotFoundError = require('../errors/not-found-err');
 const jwtSign = require('../utils/jwt-sign');
-const { ERROR_CODE } = require('../utils/error-code');
+const {
+  BAD_REQUEST_ERROR_CODE,
+  LOGIN_FAIL_MESSAGE,
+  REPEATED_EMAIL_ERROR_MESSAGE,
+  INCORRECT_ID_MESSAGE,
+  CAST_ERROR,
+} = require('../utils/utils');
 
 const getCurrentUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     const { email, name } = user;
     if (!user) {
-      throw new NotFoundError('Нет пользователя с таким id');
+      throw new NotFoundError(INCORRECT_ID_MESSAGE('пользователя'));
     }
     res.send({ email, name });
   } catch (err) {
-    if (err.name === 'CastError') {
-      err.statusCode = ERROR_CODE;
+    if (err.name === CAST_ERROR) {
+      err.statusCode = BAD_REQUEST_ERROR_CODE;
     }
     next(err);
   }
@@ -28,7 +34,7 @@ const createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new ConflictingRequest('Уже есть такой email');
+        throw new ConflictingRequest(REPEATED_EMAIL_ERROR_MESSAGE);
       }
       return bcrypt.hash(password, 10);
     })
@@ -47,12 +53,12 @@ const login = (req, res, next) => {
   return User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new Unautorized('Неправильные почта или пароль');
+        throw new Unautorized(LOGIN_FAIL_MESSAGE);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new Unautorized('Неправильные почта или пароль');
+            throw new Unautorized(LOGIN_FAIL_MESSAGE);
           }
           const token = jwtSign(user._id);
           res.send({ token });
