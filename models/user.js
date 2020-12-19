@@ -1,31 +1,25 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const {
-  REQUIRED_MESSAGE,
-  VALIDATION_MESSAGE,
-  INCORRECT_LENGTH_MESSAGE,
-  REPEATED_EMAIL_ERROR_MESSAGE,
-} = require('../utils/utils');
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('name')],
-    minlength: [2, INCORRECT_LENGTH_MESSAGE('Минимальная', 'name', '2')],
-    maxlength: [30, INCORRECT_LENGTH_MESSAGE('Максимальная', 'name', '30')],
+    required: [true, 'Поле "name" должно быть заполнено'],
+    minlength: [2, 'Минимальная длина поля "name" - 2 символа'],
+    maxlength: [30, 'Максимальная длина поля "name" - 30 символов'],
   },
   email: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('email')],
-    unique: [true, REPEATED_EMAIL_ERROR_MESSAGE],
+    required: [true, 'Поле "email" должно быть заполнено'],
+    unique: [true, 'Такой email уже существует'],
     validate: {
       validator: (v) => validator.isEmail(v),
-      message: VALIDATION_MESSAGE('email', 'email'),
+      message: 'Поле "email" должно быть валидным email-адресом',
     },
   },
   password: {
     type: String,
-    required: [true, REQUIRED_MESSAGE('password')],
+    required: [true, 'Поле "password" должно быть заполнено'],
     select: false,
   },
 });

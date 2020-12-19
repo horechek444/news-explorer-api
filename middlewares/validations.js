@@ -1,13 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 const { ObjectId } = require('mongoose').Types;
 const validator = require('validator');
-const {
-  REQUIRED_MESSAGE,
-  VALIDATION_MESSAGE,
-  EMPTY_FIELD_MESSAGE,
-  INCORRECT_LENGTH_MESSAGE,
-  INVALID_ID,
-} = require('../utils/utils');
 
 const validateObjId = celebrate({
   params: Joi.object().keys({
@@ -16,7 +9,7 @@ const validateObjId = celebrate({
         if (ObjectId.isValid(value)) {
           return value;
         }
-        return helpers.message(INVALID_ID);
+        return helpers.message('Невалидный id');
       }),
   }),
 });
@@ -25,48 +18,48 @@ const validateArticleBody = celebrate({
   body: Joi.object().keys({
     keyword: Joi.string().required()
       .messages({
-        'any.required': REQUIRED_MESSAGE('keyword'),
-        'string.empty': EMPTY_FIELD_MESSAGE('keyword'),
+        'any.required': 'Поле "keyword" должно быть заполнено',
+        'string.empty': 'Поле "keyword" не должно быть пустым',
       }),
     title: Joi.string().required()
       .messages({
-        'any.required': REQUIRED_MESSAGE('title'),
-        'string.empty': EMPTY_FIELD_MESSAGE('title'),
+        'any.required': 'Поле "title" должно быть заполнено',
+        'string.empty': 'Поле "title" не должно быть пустым',
       }),
     text: Joi.string().required()
       .messages({
-        'any.required': REQUIRED_MESSAGE('text'),
-        'string.empty': EMPTY_FIELD_MESSAGE('text'),
+        'any.required': 'Поле "text" должно быть заполнено',
+        'string.empty': 'Поле "text" не должно быть пустым',
       }),
     date: Joi.string().required()
       .messages({
-        'any.required': REQUIRED_MESSAGE('date'),
-        'string.empty': EMPTY_FIELD_MESSAGE('date'),
+        'any.required': 'Поле "date" должно быть заполнено',
+        'string.empty': 'Поле "date" не должно быть пустым',
       }),
     source: Joi.string().required()
       .messages({
-        'any.required': REQUIRED_MESSAGE('source'),
-        'string.empty': EMPTY_FIELD_MESSAGE('source'),
+        'any.required': 'Поле "source" должно быть заполнено',
+        'string.empty': 'Поле "source" не должно быть пустым',
       }),
     link: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
         return value;
       }
-      return helpers.message(VALIDATION_MESSAGE('link', 'url'));
+      return helpers.message('Поле "link" должно быть валидным url-адресом');
     })
       .messages({
-        'any.required': REQUIRED_MESSAGE('link'),
-        'string.empty': EMPTY_FIELD_MESSAGE('link'),
+        'any.required': 'Поле "link" должно быть заполнено',
+        'string.empty': 'Поле "link" не должно быть пустым',
       }),
     image: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
         return value;
       }
-      return helpers.message(VALIDATION_MESSAGE('image', 'url'));
+      return helpers.message('Поле "image" должно быть валидным url-адресом');
     })
       .messages({
-        'any.required': REQUIRED_MESSAGE('image'),
-        'string.empty': EMPTY_FIELD_MESSAGE('image'),
+        'any.required': 'Поле "image" должно быть заполнено',
+        'string.empty': 'Поле "image" не должно быть пустым',
       }),
   }),
 });
@@ -75,22 +68,22 @@ const validateUserBody = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30)
       .messages({
-        'string.min': INCORRECT_LENGTH_MESSAGE('Минимальная', 'name', '2'),
-        'string.max': INCORRECT_LENGTH_MESSAGE('Максимальная', 'name', '30'),
-        'any.required': REQUIRED_MESSAGE('name'),
-        'string.empty': EMPTY_FIELD_MESSAGE('name'),
+        'string.min': 'Минимальная длина поля "name" - 2 символа',
+        'string.max': 'Максимальная длина поля "name" - 30 символов',
+        'any.required': 'Поле "name" должно быть заполнено',
+        'string.empty': 'Поле "name" не должно быть пустым',
       }),
     email: Joi.string().required().email()
-      .message(VALIDATION_MESSAGE('email', 'email'))
+      .message('Поле "email" должно быть валидным email-адресом')
       .messages({
-        'any.required': REQUIRED_MESSAGE('email'),
-        'string.empty': EMPTY_FIELD_MESSAGE('email'),
+        'any.required': 'Поле "email" должно быть заполнено',
+        'string.empty': 'Поле "email" не должно быть пустым',
       }),
     password: Joi.string().min(8).required()
       .messages({
-        'string.min': INCORRECT_LENGTH_MESSAGE('Минимальная', 'password', '8'),
-        'any.required': REQUIRED_MESSAGE('password'),
-        'string.empty': EMPTY_FIELD_MESSAGE('password'),
+        'string.min': 'Минимальная длина поля "password" - 8 символов',
+        'any.required': 'Поле "password" должно быть заполнено',
+        'string.empty': 'Поле "password" не должно быть пустым',
       }),
   }),
 });
@@ -98,16 +91,16 @@ const validateUserBody = celebrate({
 const validateAuthentication = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email()
-      .message(VALIDATION_MESSAGE('email', 'email'))
+      .message('Поле "email" должно быть валидным email-адресом')
       .messages({
-        'any.required': REQUIRED_MESSAGE('email'),
-        'string.empty': EMPTY_FIELD_MESSAGE('email'),
+        'any.required': 'Поле "email" должно быть заполнено',
+        'string.empty': 'Поле "email" не должно быть пустым',
       }),
     password: Joi.string().min(8).required()
       .messages({
-        'string.min': INCORRECT_LENGTH_MESSAGE('Минимальная', 'password', '8'),
-        'any.required': REQUIRED_MESSAGE('password'),
-        'string.empty': EMPTY_FIELD_MESSAGE('password'),
+        'string.min': 'Минимальная длина поля "password" - 8 символов',
+        'any.required': 'Поле "password" должно быть заполнено',
+        'string.empty': 'Поле "password" не должно быть пустым',
       }),
   }),
 });
