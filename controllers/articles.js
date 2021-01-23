@@ -31,6 +31,7 @@ const createArticle = async (req, res, next) => {
     const newArticle = await Article.create({
       owner, keyword, title, text, date, source, link, image,
     });
+    console.log(newArticle);
     res.send(newArticle);
   } catch (err) {
     if (err.name === CAST_ERROR || err.name === VALIDATION_ERROR) {
