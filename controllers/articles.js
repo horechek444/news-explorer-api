@@ -28,12 +28,10 @@ const createArticle = async (req, res, next) => {
       keyword, title, text, date, source, link, image,
     } = req.body;
     const owner = req.user.id;
-    await Article.create({
+    const newArticle = await Article.create({
       owner, keyword, title, text, date, source, link, image,
     });
-    res.send({
-      keyword, title, text, date, source, link, image,
-    });
+    res.send(newArticle);
   } catch (err) {
     if (err.name === CAST_ERROR || err.name === VALIDATION_ERROR) {
       err.statusCode = BAD_REQUEST_ERROR_CODE;
