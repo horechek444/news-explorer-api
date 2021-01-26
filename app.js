@@ -9,22 +9,13 @@ const routes = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/error-handler');
 const { devUrl } = require('./utils/config');
-// const { limiter } = require('./utils/rate-limiter');
+const { limiter } = require('./utils/rate-limiter');
 
 const app = express();
 const { PORT = 3000, MONGO_URL = devUrl } = process.env;
 
-// app.use(limiter);
+app.use(limiter);
 app.use(cors());
-
-const corsOptions = {
-  origin: 'http://localhost:59871/',
-  optionsSuccessStatus: 200,
-};
-
-app.get('/products/:id', cors(corsOptions), (req, res) => {
-  res.json({ msg: 'This is CORS-enabled for only example.com.' });
-});
 
 const mongooseConnectOptions = {
   useNewUrlParser: true,
