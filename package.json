@@ -20,7 +20,7 @@
   "homepage": "https://github.com/horechek444/news-explorer-api#readme",
   "devDependencies": {
     "eslint": "^7.2.0",
-    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
     "nodemon": "^2.0.4"
   },
@@ -31,9 +31,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-rate-limit": "^5.2.3",
     "express-winston": "^4.0.5",
     "helmet": "^4.2.0",
-    "joi": "^17.3.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.15",
     "validator": "^13.1.17",

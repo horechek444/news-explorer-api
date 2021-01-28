@@ -1,19 +1,22 @@
 const Article = require('../models/article');
 const Forbidden = require('../errors/forbidden');
 const NotFoundError = require('../errors/not-found-err');
-const { ERROR_CODE } = require('../utils/error-code');
+const {
+  BAD_REQUEST_ERROR_CODE,
+  FORBIDDEN_MESSAGE,
+  INCORRECT_ID_MESSAGE,
+  CAST_ERROR,
+  VALIDATION_ERROR,
+} = require('../utils/utils');
 
 const getArticles = async (req, res, next) => {
   try {
     const owner = req.user.id;
     const articles = await Article.find({ owner });
-    if (articles.length === 0) {
-      throw new NotFoundError('Нет сохраненных статей для вывода');
-    }
     res.send(articles);
   } catch (err) {
-    if (err.name === 'CastError') {
-      err.statusCode = ERROR_CODE;
+    if (err.name === CAST_ERROR) {
+      err.statusCode = BAD_REQUEST_ERROR_CODE;
     }
     next(err);
   }
@@ -25,15 +28,13 @@ const createArticle = async (req, res, next) => {
       keyword, title, text, date, source, link, image,
     } = req.body;
     const owner = req.user.id;
-    await Article.create({
+    const newArticle = await Article.create({
       owner, keyword, title, text, date, source, link, image,
     });
-    res.send({
-      keyword, title, text, date, source, link, image,
-    });
+    res.send(newArticle);
   } catch (err) {
-    if (err.name === 'CastError' || err.name === 'ValidationError') {
-      err.statusCode = ERROR_CODE;
+    if (err.name === CAST_ERROR || err.name === VALIDATION_ERROR) {
+      err.statusCode = BAD_REQUEST_ERROR_CODE;
     }
     next(err);
   }
@@ -45,15 +46,15 @@ const deleteArticle = async (req, res, next) => {
     const { articleId } = req.params;
     const articleForConfirm = await Article.findById(articleId).select('+owner');
     if (articleForConfirm === null) {
-      throw new NotFoundError('Нет карточки с таким id');
+      throw new NotFoundError(INCORRECT_ID_MESSAGE('статьи'));
     } else if (currentUser !== articleForConfirm.owner.toString()) {
-      throw new Forbidden('Вы не владелец карточки и не можете её удалить');
+      throw new Forbidden(FORBIDDEN_MESSAGE);
     }
     const confirmedArticle = await Article.findByIdAndRemove(articleId);
     res.send(confirmedArticle);
   } catch (err) {
-    if (err.name === 'CastError') {
-      err.statusCode = ERROR_CODE;
+    if (err.name === CAST_ERROR) {
+      err.statusCode = BAD_REQUEST_ERROR_CODE;
     }
     next(err);
   }
